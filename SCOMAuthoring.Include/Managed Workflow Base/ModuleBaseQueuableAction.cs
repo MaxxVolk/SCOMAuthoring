@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Xml;
 
 // SCOM SDK
@@ -175,7 +174,6 @@ namespace SCOMAuthoringBook.Library
   public static class QueueManager
   {
     private static ConcurrentQueue<QueueItemCallback> concurrentQueue = new ConcurrentQueue<QueueItemCallback>();
-    // private static object dequeueThreadRunning = new object();
     private static SemaphoreSlim semaphore = new SemaphoreSlim(1, 1);
 
     public static void Enqueue(QueueItemCallback item)
@@ -223,132 +221,4 @@ namespace SCOMAuthoringBook.Library
       }
     }
   }
-  public abstract class ModuleBaseTimedAsyncDataSource<TOutputDataType> : ModuleBaseDataSource<TOutputDataType> where TOutputDataType : DataItemBase
-  {
-    private Timer _timer = null;
-    private object callbackActive = new object();
-    protected Thread managedThread;
-
-    protected Timer DSTimer { get { return _timer; } }
-    protected abstract long IntervalSeconds { get; }
-
-
-    public ModuleBaseTimedAsyncDataSource(ModuleHost<TOutputDataType> moduleHost, XmlReader configuration, byte[] previousState) : base(moduleHost, configuration, previousState)
-    {
-     
-      OnStart += ModuleBaseTimedDataSource_OnStart;
-      OnShutdown += ModuleBaseTimedDataSource_OnShutdown;
-    }
-
-    private void ModuleBaseTimedDataSource_OnShutdown(object sender, EventArgs e)
-    {
-      if (_timer != null)
-        _timer.Dispose();
-      _timer = null;
-    }
-
-    private void ModuleBaseTimedDataSource_OnStart(object sender, EventArgs e)
-    {
-      _timer = new Timer(TimerCallback, this, 0, IntervalSeconds * 1000);
-    }
-
-    private void TimerCallback(object state)
-    {
-      if (Monitor.IsEntered(callbackActive))
-      {
-        Global.logWriteWarning("{0} cannot start GetOutputData thread instance, because the previous instance is still running.", this, GetType().FullName);
-        return;
-      }
-      managedThread = new Thread(GetOutputDataAsync);
-      managedThread.Start();
-    }
-
-    private void GetOutputDataAsync()
-    {
-      Monitor.Enter(callbackActive);
-      try
-      {
-        TOutputDataType[] result = GetOutputData();
-        if (result == null || shutdown)
-          return;
-        PostOutputData(result, null, false);
-      }
-      catch(ThreadAbortException)
-      {
-        // ????
-        throw;
-      }
-      finally
-      {
-        if (Monitor.IsEntered(callbackActive))
-          Monitor.Exit(callbackActive);
-      }
-    }
-
-    protected abstract TOutputDataType[] GetOutputData();
-  }
-
-  public abstract class ModuleBaseTimedTaskDataSource<TOutputDataType> : ModuleBaseDataSource<TOutputDataType> where TOutputDataType : DataItemBase
-  {
-    private Timer _timer = null;
-    private bool callbackActive;
-
-    protected Timer DSTimer { get { return _timer; } }
-    protected abstract long IntervalSeconds { get; }
-
-
-    public ModuleBaseTimedTaskDataSource(ModuleHost<TOutputDataType> moduleHost, XmlReader configuration, byte[] previousState) : base(moduleHost, configuration, previousState)
-    {
-
-      OnStart += ModuleBaseTimedDataSource_OnStart;
-      OnShutdown += ModuleBaseTimedDataSource_OnShutdown;
-    }
-
-    private void ModuleBaseTimedDataSource_OnShutdown(object sender, EventArgs e)
-    {
-      if (_timer != null)
-        _timer.Dispose();
-      _timer = null;
-    }
-
-    private void ModuleBaseTimedDataSource_OnStart(object sender, EventArgs e)
-    {
-      _timer = new Timer(TimerCallback, this, 0, IntervalSeconds * 1000);
-    }
-
-    private void TimerCallback(object state)
-    {
-      if (callbackActive)
-        return;
-      Task.Run(async () =>
-      {
-        callbackActive = true;
-        try
-        {
-          TOutputDataType[] result = await GetOutputDataAsync();
-          if (result == null || shutdown)
-            return;
-          PostOutputData(result, null, false);
-        }
-        catch (Exception e)
-        {
-          Global.logWriteException(e, this);
-        }
-        finally
-        {
-          callbackActive = false;
-        }
-      }
-      );
-    }
-
-    private Task<TOutputDataType[]> GetOutputDataAsync()
-    {
-      Global.logWriteInformation("ModuleBaseTimedAsyncDataSource starts new Task from thread #{0}.", this, Thread.CurrentThread.ManagedThreadId);
-      return Task.Run(() => GetOutputData());
-    }
-
-    protected abstract TOutputDataType[] GetOutputData();
-  }
-
 }

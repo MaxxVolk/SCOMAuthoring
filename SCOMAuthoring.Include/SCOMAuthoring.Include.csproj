@@ -61,16 +61,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class Instance Editor\BindableMonitoringObject.cs" />
+    <Compile Include="Class Instance Editor\SCOMClassInstanceAdapter.cs" />
+    <Compile Include="Class Instance Editor\SCOMClassPropertyAttribute.cs" />
+    <Compile Include="Class Instance Editor\SCOMInstanceAdapterComparer.cs" />
+    <Compile Include="Class Instance Editor\SCOMInstanceAdapterPropertyComparer.cs" />
+    <Compile Include="Class Instance Editor\SCOMInstanceBindingList.cs" />
+    <Compile Include="Class Instance Editor\SCOMClassInstanceEditor.cs" />
+    <Compile Include="Class Instance Editor\SupportObjects.cs" />
+    <Compile Include="Helpers\MonitorOverrideProcessor.cs" />
+    <Compile Include="Helpers\SCOMQuickGet.cs" />
+    <Compile Include="Helpers\SCOMRHelper.cs" />
+    <Compile Include="Helpers\SCOMRHelperServer.cs" />
     <Compile Include="Ids\SCOM.System.ID.cs" />
     <Compile Include="Ids\SCOM.SystemCenter.ID.cs" />
     <Compile Include="Ids\SCOM.Windows.ID.cs" />
     <Compile Include="Managed Workflow Base\DataItesm.cs" />
     <Compile Include="Managed Workflow Base\GlobalHelpers.cs" />
-    <Compile Include="Managed Workflow Base\ManagedActionBase.Net.4.5.cs" />
+    <Compile Include="Managed Workflow Base\ModuleBaseQueuableAction.cs" />
     <Compile Include="Managed Workflow Base\ModuleBaseCoreWorkflow.cs" />
     <Compile Include="Managed Workflow Base\ModuleBaseDataSource.cs" />
     <Compile Include="Managed Workflow Base\ModuleBaseSimpleAction.cs" />
+    <Compile Include="Managed Workflow Base\ModuleBaseTimedAsyncDataSource.cs" />
     <Compile Include="Managed Workflow Base\ModuleBaseTimedDataSource.cs" />
+    <Compile Include="Managed Workflow Base\ModuleBaseTimedTaskDataSource.cs" />
     <Compile Include="Managed Workflow Base\ModuleBaseWithServiceFunctions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
