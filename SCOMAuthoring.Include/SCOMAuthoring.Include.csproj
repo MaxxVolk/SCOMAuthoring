@@ -41,6 +41,9 @@
     <Reference Include="Microsoft.EnterpriseManagement.HealthService">
       <HintPath>..\..\..\..\SDKs\SCOM 2012\Microsoft.EnterpriseManagement.HealthService.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.EnterpriseManagement.Modules.DataTypes">
+      <HintPath>..\..\..\..\SDKs\SCOM 2012\Microsoft.EnterpriseManagement.Modules.DataTypes.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.EnterpriseManagement.OperationsManager, Version=7.0.5000.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\SDKs\SCOM 2012\Microsoft.EnterpriseManagement.OperationsManager.dll</HintPath>
@@ -61,8 +64,14 @@
     <Compile Include="Ids\SCOM.System.ID.cs" />
     <Compile Include="Ids\SCOM.SystemCenter.ID.cs" />
     <Compile Include="Ids\SCOM.Windows.ID.cs" />
-    <Compile Include="Managed Workflow Base\ManagedActionBase.cs" />
+    <Compile Include="Managed Workflow Base\DataItesm.cs" />
+    <Compile Include="Managed Workflow Base\GlobalHelpers.cs" />
     <Compile Include="Managed Workflow Base\ManagedActionBase.Net.4.5.cs" />
+    <Compile Include="Managed Workflow Base\ModuleBaseCoreWorkflow.cs" />
+    <Compile Include="Managed Workflow Base\ModuleBaseDataSource.cs" />
+    <Compile Include="Managed Workflow Base\ModuleBaseSimpleAction.cs" />
+    <Compile Include="Managed Workflow Base\ModuleBaseTimedDataSource.cs" />
+    <Compile Include="Managed Workflow Base\ModuleBaseWithServiceFunctions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
