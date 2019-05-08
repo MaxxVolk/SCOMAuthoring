@@ -70,6 +70,7 @@
     <Compile Include="Class Instance Editor\SCOMClassInstanceEditor.cs" />
     <Compile Include="Class Instance Editor\SupportObjects.cs" />
     <Compile Include="Helpers\MonitorOverrideProcessor.cs" />
+    <Compile Include="Helpers\RegistryHelper.cs" />
     <Compile Include="Helpers\SCOMQuickGet.cs" />
     <Compile Include="Helpers\SCOMRHelper.cs" />
     <Compile Include="Helpers\SCOMRHelperServer.cs" />
